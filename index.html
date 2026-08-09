@@ -1,14 +1,186 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>NEONNIGHTS188</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEONNIGHTS188 — Tangkap Bola!</title>
     <style>
-        body { background: #0F0F1A; color: #F8F8FF; font-family: sans-serif; text-align: center; padding-top: 100px; }
-        h1 { color: #00F0FF; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3c 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+
+        h1 {
+            color: #00f0ff;
+            text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .instruksi {
+            color: #f0f;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .skor-box {
+            background: rgba(0, 240, 255, 0.1);
+            border: 2px solid #00f0ff;
+            padding: 10px 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        #skor {
+            font-size: 26px;
+            color: #00f0ff;
+            font-weight: bold;
+        }
+
+        #area-game {
+            width: 90%;
+            max-width: 500px;
+            height: 500px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 3px solid #f0f;
+            box-shadow: 0 0 20px #f0f, inset 0 0 40px rgba(255, 0, 255, 0.1);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #bola {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, #fff, #f0f, #90f);
+            border-radius: 50%;
+            position: absolute;
+            cursor: pointer;
+            box-shadow: 0 0 15px #f0f, 0 0 30px #f0f;
+            display: none;
+            transition: transform 0.1s;
+        }
+
+        #bola:active {
+            transform: scale(0.8);
+        }
+
+        .tombol {
+            padding: 12px 35px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00f0ff, #f0f);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #00f0ff;
+            transition: all 0.3s;
+        }
+
+        .tombol:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #f0f;
+        }
+
+        .info {
+            margin-top: 20px;
+            color: #aaa;
+            font-size: 14px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <h1>🎇 NEONNIGHTS188</h1>
-    <p>Selamat datang! Game sedang disiapkan...</p>
+
+    <h1>🎮 NEONNIGHTS188</h1>
+    <p class="instruksi">Klik bola neon yang muncul secepat mungkin!</p>
+
+    <div class="skor-box">
+        Skor: <span id="skor">0</span>
+    </div>
+
+    <div id="area-game">
+        <div id="bola"></div>
+    </div>
+
+    <button class="tombol" onclick="mulaiGame()">MULAI GAME</button>
+
+    <div class="info">
+        Waktu setiap bola: 1 detik<br>
+        Semakin lama dimainkan, bola semakin cepat!
+    </div>
+
+    <script>
+        let skor = 0;
+        let timerBola;
+        let kecepatan = 1000;
+        let sedangBermain = false;
+
+        const areaGame = document.getElementById('area-game');
+        const bola = document.getElementById('bola');
+        const tampilanSkor = document.getElementById('skor');
+
+        bola.addEventListener('click', function() {
+            skor++;
+            tampilanSkor.textContent = skor;
+            
+            this.style.transform = 'scale(1.3)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 100);
+
+            clearTimeout(timerBola);
+            tampilkanBola();
+
+            if (kecepatan > 400) {
+                kecepatan -= 15;
+            }
+        });
+
+        function tampilkanBola() {
+            const lebarArea = areaGame.offsetWidth - 60;
+            const tinggiArea = areaGame.offsetHeight - 60;
+
+            const posX = Math.floor(Math.random() * lebarArea) + 10;
+            const posY = Math.floor(Math.random() * tinggiArea) + 10;
+
+            bola.style.left = posX + 'px';
+            bola.style.top = posY + 'px';
+            bola.style.display = 'block';
+
+            timerBola = setTimeout(() => {
+                bola.style.display = 'none';
+                if (sedangBermain) {
+                    tampilkanBola();
+                }
+            }, kecepatan);
+        }
+
+        function mulaiGame() {
+            skor = 0;
+            kecepatan = 1000;
+            sedangBermain = true;
+            tampilanSkor.textContent = skor;
+            
+            setTimeout(tampilkanBola, 500);
+        }
+    </script>
+
 </body>
-</html>
+    </html>
+
